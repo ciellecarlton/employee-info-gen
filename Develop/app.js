@@ -14,47 +14,62 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 let employees = [];
-// start function
-function initApp () {
-    startHtml();
-    addMember();
-}
 
-// being prompts
-var newPosition = [{
+// begin asking questions by making an array of the questions that apply to all roles
+questions = [{
     message: "Would you like to add a positon?",
     type: "list",
-    name: "newPosition", 
+    name: "newPosition",
     choices: ["yes ", "no"],
-}]
 
-var positionType = [ {
+},
+{
     message: "What is the title of your new position?",
     type: "list",
     name: "positionType",
     choices: ["Engineer", "Intern", "Manager"],
-}];
 
-var newEngineer = [ { 
-    message: "What is your ID?",
-    type: "input",
-    name: "engineerId",
-}, 
-{
- message: "What is your email?",
- type: "input",
- name: "email",
 },
 {
-message: "What is your Github account username?",
-type: "input",
-name: "username",
+    message: "What is your ID?",
+    type: "input",
+    name: "employeeId",
+    
+},
+{
+    message: "What is your email?",
+    type: "input",
+    name: "email",
+},{
+    message: "Enter Github username:",
+    type:"input",
+    name: "gituser",
+    // using when to only ask this question if the user chose engineer 
+    // in positionType
+    when: function (answers) {
+        return answers.positionType === "Engineer";
+    }
+},
+{
+    message: "Enter office number:",
+    type: "number",
+    name: "officenumber",
+    when: function (answers) {
+        return answers.positionType === "Manager";
+    }
+},
+{
+    message: "Enter school name:",
+    type: "input",
+    name: "schoolname",
+    when: function (answers) {
+        return answers.positionType === "Intern";
+    }
 }]
+inquirer.prompt(questions);
 
-inquirer.prompt (newPosition);
- inquirer.prompt(newEngineer)
+.then (answers.data)
 
- 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
@@ -74,3 +89,4 @@ inquirer.prompt (newPosition);
 // for further information. Be sure to test out each class and verify it generates an
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
+
