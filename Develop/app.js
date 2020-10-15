@@ -69,9 +69,12 @@ questions = [{
 inquirer.prompt(questions)
 
 .then (answers => {
-    const cielle = new Manager ("cielle", "13", "cielle@gmail.com", "206")
-     var role = cielle.getRole();
-     console.log(role)
+    // const cielle = new Manager ("cielle", "13", "cielle@gmail.com", "206")
+    // create function for each role 
+
+
+
+    
 })
 
 // After the user has input all employees desired, call the `render` function (required
@@ -94,3 +97,13 @@ inquirer.prompt(questions)
 // object with the correct structure and methods. This structure will be crucial in order
 // for the provided `render` function to work! ```
 
+
+// next steps
+
+// 1. create manager 
+// 2. in create manager callback function call 'createTeam' fuction 
+// 3. the 'createTeam' function asks what role would you like to add 
+// 4.  gives options "engineer, intern or i dont want to add any more members" *muliple choice questions 
+// 5. based on chosen role add call funciton specific to role 
+// 6. if 'done' call 'buildTeam' 
+// 7. 
