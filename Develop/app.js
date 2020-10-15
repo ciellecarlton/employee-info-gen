@@ -66,9 +66,13 @@ questions = [{
         return answers.positionType === "Intern";
     }
 }]
-inquirer.prompt(questions);
+inquirer.prompt(questions)
 
-.then (answers.data)
+.then (answers => {
+    const cielle = new Manager ("cielle", "13", "cielle@gmail.com", "206")
+     var role = cielle.getRole();
+     console.log(role)
+})
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
