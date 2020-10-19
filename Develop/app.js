@@ -23,6 +23,7 @@ questions = [{
     choices: ["yes ", "no"],
 
 },
+// asks user for their new posotion title 
 {
     message: "What is the title of your new position?",
     type: "list",
@@ -30,17 +31,21 @@ questions = [{
     choices: ["Engineer", "Intern", "Manager"],
 
 },
+// asks every user for the employeee ID number 
 {
     message: "What is your ID?",
     type: "input",
     name: "employeeId",
     
 },
+// asks each user for their Email accont 
 {
     message: "What is your email?",
     type: "input",
     name: "email",
-},{
+},
+// asks the engineer for their github
+{
     message: "Enter Github username:",
     type:"input",
     name: "gituser",
@@ -50,6 +55,7 @@ questions = [{
         return answers.positionType === "Engineer";
     }
 },
+// asks manager fot their office number
 {
     message: "Enter office number:",
     type: "number",
@@ -58,6 +64,7 @@ questions = [{
         return answers.positionType === "Manager";
     }
 },
+// asks intern for their school name 
 {
     message: "Enter school name:",
     type: "input",
