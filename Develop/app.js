@@ -7,110 +7,131 @@ const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
-
 const render = require("./lib/htmlRenderer");
 
+let teamMembers = [];
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
-let employees = [];
 
-// begin asking questions by making an array of the questions that apply to all roles
-questions = [{
-    message: "Would you like to add a positon?",
-    type: "list",
-    name: "newPosition",
-    choices: ["yes ", "no"],
-
-},
-// asks user for their new posotion title 
-{
-    message: "What is the title of your new position?",
-    type: "list",
-    name: "positionType",
-    choices: ["Engineer", "Intern", "Manager"],
-
-},
-// asks every user for the employeee ID number 
-{
-    message: "What is your ID?",
-    type: "input",
-    name: "employeeId",
-    
-},
-// asks each user for their Email accont 
-{
-    message: "What is your email?",
-    type: "input",
-    name: "email",
-},
-// asks the engineer for their github
-{
-    message: "Enter Github username:",
-    type:"input",
-    name: "gituser",
-    // using when to only ask this question if the user chose engineer 
-    // in positionType
-    when: function (answers) {
-        return answers.positionType === "Engineer";
+function buildPage(){
+    fs.writeFileSync(outputPath, render(teamMembers), "utf-8")
+}
+// begin the prompts here 
+function createTeam(){
+    inquirer.prompt([
+        {
+          type: "list",
+          name: "memberChoice",
+          message: "Which type of team member would you like to add?",
+          choices: [
+              "Manager",
+            "Engineer",
+            "Intern",
+            "I don't want to add any more team members"
+          ]
+        }
+        // based on the role the user choses, there will be specific questions
+      ]).then(userChoice => {
+        switch(userChoice.memberChoice) {
+        case "Engineer":
+          addEngineer();
+          break;
+        case "Intern":
+          addIntern();
+          break;
+          case "Manager":
+              addManager();
+              break;
+        default:
+          buildPage();
+        }
+      });
+}
+function addManager(){
+    inquirer.prompt([{
+        type: "input",
+        name: "managerName",
+        message: "What is your manager's name?",
+    },
+    {
+        type: "input",
+        name: "managerId",
+        message: "What is your manager's id?",
+    },
+    {
+        type: "input",
+        name: "managerEmail",
+        message: "What is your manager's email?",
+    },
+    {
+        type: "input",
+        name: "officeNumber",
+        message: "What is your manager's office number?",
     }
-},
-// asks manager fot their office number
-{
-    message: "Enter office number:",
-    type: "number",
-    name: "officenumber",
-    when: function (answers) {
-        return answers.positionType === "Manager";
-    }
-},
-// asks intern for their school name 
-{
-    message: "Enter school name:",
-    type: "input",
-    name: "schoolname",
-    when: function (answers) {
-        return answers.positionType === "Intern";
-    }
-}]
-inquirer.prompt(questions)
-
-.then (answers => {
-    // const cielle = new Manager ("cielle", "13", "cielle@gmail.com", "206")
-    // create function for each role 
-
-
-
-    
+    // add the answers to a var specific to the role
+]).then(answers => {
+    var manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.officeNumber);
+    teamMembers.push(manager);
+    createTeam();
 })
-
-// After the user has input all employees desired, call the `render` function (required
-// above) and pass in an array containing all employee objects; the `render` function will
-// generate and return a block of HTML including templated divs for each employee!
-
-// After you have your html, you're now ready to create an HTML file using the HTML
-// returned from the `render` function. Now write it to a file named `team.html` in the
-// `output` folder. You can use the variable `outputPath` above target this location.
-// Hint: you may need to check if the `output` folder exists and create it if it
-// does not.
-
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
-
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
-
-
-// next steps
-
-// 1. create manager 
-// 2. in create manager callback function call 'createTeam' fuction 
-// 3. the 'createTeam' function asks what role would you like to add 
-// 4.  gives options "engineer, intern or i dont want to add any more members" *muliple choice questions 
-// 5. based on chosen role add call funciton specific to role 
-// 6. if 'done' call 'buildTeam' 
-// 7. 
+// prompts for next role
+}
+function addEngineer() {
+    inquirer.prompt([
+      {
+        type: "input",
+        name: "engineerName",
+        message: "What is your engineer's name?",
+      },
+      {
+        type: "input",
+        name: "engineerId",
+        message: "What is your engineer's id?",
+      },
+      {
+        type: "input",
+        name: "engineerEmail",
+        message: "What is your engineer's email?",
+      },
+      {
+        type: "input",
+        name: "engineerGithub",
+        message: "What is your engineer's GitHub username?",
+      }
+       // add the answers to a var specific to the role and *adds to new team*
+    ]).then(answers => {
+      const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
+      teamMembers.push(engineer);
+      createTeam();
+    });
+// prompts for next role
+  }
+  function addIntern() {
+    inquirer.prompt([
+      {
+        type: "input",
+        name: "internName",
+        message: "What is your intern's name?",
+      },
+      {
+        type: "input",
+        name: "internId",
+        message: "What is your intern's id?",
+      },
+      {
+        type: "input",
+        name: "internEmail",
+        message: "What is your intern's email?",
+      },
+      {
+        type: "input",
+        name: "internSchool",
+        message: "What is your intern's school?",
+      }
+    //   add to team
+    ]).then(answers => {
+      const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
+      teamMembers.push(intern);
+      createTeam();
+    });
+  }
+  createTeam()
