@@ -7,15 +7,17 @@ const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
 const outputPath = path.join(OUTPUT_DIR, "team.html");
+
 const render = require("./lib/htmlRenderer");
 
 let teamMembers = [];
 
+// begin building page
 
 function buildPage(){
     fs.writeFileSync(outputPath, render(teamMembers), "utf-8")
 }
-// begin the prompts here 
+// create prompts for specific team members and adds them to the team
 function createTeam(){
     inquirer.prompt([
         {
@@ -29,7 +31,6 @@ function createTeam(){
             "I don't want to add any more team members"
           ]
         }
-        // based on the role the user choses, there will be specific questions
       ]).then(userChoice => {
         switch(userChoice.memberChoice) {
         case "Engineer":
@@ -67,13 +68,11 @@ function addManager(){
         name: "officeNumber",
         message: "What is your manager's office number?",
     }
-    // add the answers to a var specific to the role
 ]).then(answers => {
     var manager = new Manager(answers.managerName, answers.managerId, answers.managerEmail, answers.officeNumber);
     teamMembers.push(manager);
     createTeam();
 })
-// prompts for next role
 }
 function addEngineer() {
     inquirer.prompt([
@@ -97,13 +96,11 @@ function addEngineer() {
         name: "engineerGithub",
         message: "What is your engineer's GitHub username?",
       }
-       // add the answers to a var specific to the role and *adds to new team*
     ]).then(answers => {
       const engineer = new Engineer(answers.engineerName, answers.engineerId, answers.engineerEmail, answers.engineerGithub);
       teamMembers.push(engineer);
       createTeam();
     });
-// prompts for next role
   }
   function addIntern() {
     inquirer.prompt([
@@ -127,7 +124,6 @@ function addEngineer() {
         name: "internSchool",
         message: "What is your intern's school?",
       }
-    //   add to team
     ]).then(answers => {
       const intern = new Intern(answers.internName, answers.internId, answers.internEmail, answers.internSchool);
       teamMembers.push(intern);
